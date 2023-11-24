@@ -1,0 +1,41 @@
+version: docker-version
+
+secrets:
+  db_password:
+    file: docker-secrets/db_password.txt
+  db_root_password:
+    file: docker-secrets/db_root_password.txt
+
+volumes:
+  db_data:
+
+services:
+  db:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_DATABASE: nft-series
+      MYSQL_USER: nft-series
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+#  backend:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.backend
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - mysql
