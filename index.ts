@@ -1,16 +1,18 @@
-import express, { Express, Request, Response } from "express";
-import dotenv                                  from "dotenv";
+import express, { Express } from "express";
+import dotenv               from "dotenv";
+import loaders              from "./src/loaders";
 
 dotenv.config();
 
-const app: Express = express();
-const port = process.env.PORT;
+async function startServer() {
+  const app: Express = express();
+  const port = process.env.PORT;
+  await loaders(app);
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Express with TS');
-});
+  app.listen(port, () => {
+    console.log(`The server is running at http://localhost:${port}`);
+  });
+}
 
-app.listen(port, () => {
-  console.log(`server is running at http://localhost:${port}`);
-});
 
+startServer();
