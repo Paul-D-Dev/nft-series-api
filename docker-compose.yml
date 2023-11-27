@@ -5,6 +5,10 @@ secrets:
     file: docker-secrets/db_password.txt
   db_root_password:
     file: docker-secrets/db_root_password.txt
+  db_name:
+    file: docker-secrets/db_name.txt
+  db_user:
+    file: docker-secrets/db_user.txt
 
 volumes:
   db_data:
@@ -16,8 +20,8 @@ services:
       - db_data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: nft-series
-      MYSQL_USER: nft-series
+      MYSQL_DATABASE: /run/secrets/db_name
+      MYSQL_USER: /run/secrets/db_user
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
     ports:
       - 3306:3306
@@ -25,6 +29,8 @@ services:
     secrets:
       - db_root_password
       - db_password
+      - db_name
+      - db_user
 
   adminer:
     image: adminer
