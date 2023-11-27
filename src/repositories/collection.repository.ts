@@ -9,8 +9,7 @@ export class CollectionRepository {
   }
 
   async findById(id: number): Promise<any> {
-    const collection = await this.db.query(this.GET_BY_ID, 1);
-    console.log(collection)
+    const collection = await this.db.query(this.GET_BY_ID, id);
     return collection || null;
   }
 }
