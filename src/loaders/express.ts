@@ -1,6 +1,5 @@
-import { Application } from "express";
-import cors            from "cors";
-import bodyParser      from "body-parser";
+import express, { Application } from "express";
+import cors                     from "cors";
 
 export default async (app: Application) => {
   app.get('/', (req, res) => {
@@ -14,8 +13,8 @@ export default async (app: Application) => {
   });
 
   app.use(cors());
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(express.json());
 
   return app;
 }
