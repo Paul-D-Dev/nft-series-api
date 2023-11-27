@@ -20,7 +20,8 @@ services:
       MYSQL_USER: nft-series
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
     ports:
-      - 33060:3306
+      - 3306:3306
+    restart: always
     secrets:
       - db_root_password
       - db_password
