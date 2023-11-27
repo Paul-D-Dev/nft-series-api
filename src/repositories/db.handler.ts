@@ -1,9 +1,9 @@
-import { Pool } from 'mysql';
+import { Pool } from 'mysql2';
 
 export class DbHandler {
 
   static instance: DbHandler;
-  private pool: Pool;
+  private readonly pool: Pool;
 
   static getInstance(pool?: Pool) {
     if (!this.instance && pool != null) {
@@ -19,7 +19,10 @@ export class DbHandler {
   query(sql: string, args?: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.pool.getConnection((err, connection) => {
-        console.error('getConnection error: ', err);
+        if (err) {
+          console.error('getConnection error: ', err);
+          return reject(err);
+        }
         connection.query(sql, args, (err, rows) => {
           connection.release();
           if (err) {
