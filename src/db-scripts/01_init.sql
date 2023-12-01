@@ -65,7 +65,6 @@ CREATE TABLE IF NOT EXISTS nfts (
   image_id int,
   name_seo VARCHAR(255),
   description TEXT,
-  image_url VARCHAR(255),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP,
   character_id INT,
