@@ -1,6 +1,3 @@
-CREATE DATABASE IF NOT EXISTS nft_series;
-USE nft_series;
-
 CREATE TABLE images (
   id INT PRIMARY KEY AUTO_INCREMENT,
   src VARCHAR(255),
