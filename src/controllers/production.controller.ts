@@ -1,9 +1,9 @@
 import { Application, Router } from "express";
-import { CollectionService }   from "../services/collection.service";
+import { ProductionService }   from "../services/production.service";
 
-export const CollectionController = (app: Application) => {
+export const ProductionController = (app: Application) => {
   let router: Router = Router();
-  const service = new CollectionService();
+  const service = new ProductionService();
 
   router.get('/:id', async (req, res) => {
     const id = req.params.id
@@ -15,5 +15,5 @@ export const CollectionController = (app: Application) => {
     }
   })
 
-  app.use('/collections', router);
+  app.use('/productions', router);
 }
