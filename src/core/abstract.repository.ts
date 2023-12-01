@@ -8,7 +8,7 @@ export abstract class AbstractRepository<T> {
                      FROM ${table}`;
     this._GET_BY_ID = `SELECT *
                        FROM ${table}
-                       WHERE id ?;`;
+                       WHERE id = ?;`;
     this._POST = `INSERT INTO ${table}
                   SET ?;`;
     this._UPDATE_BY_ID = `UPDATE ${table} WHERE id = ? ;`;
