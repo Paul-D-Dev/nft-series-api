@@ -1,36 +1,26 @@
 version: docker-version
 
-secrets:
-  db_password:
-    file: docker-secrets/db_password.txt
-  db_root_password:
-    file: docker-secrets/db_root_password.txt
-  db_name:
-    file: docker-secrets/db_name.txt
-  db_user:
-    file: docker-secrets/db_user.txt
-
-volumes:
-  db_data:
-
 services:
   db:
-    image: mysql:latest
+    build:
+      context: .
+      dockerfile: dockerfile.mysql
     volumes:
       - db_data:/var/lib/mysql
+      - ./src/db-scripts:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
-      MYSQL_DATABASE: /run/secrets/db_name
-      MYSQL_USER: /run/secrets/db_user
+      MYSQL_USER_FILE: /run/secrets/db_user
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_DATABASE_FILE: /run/secrets/db_name
     ports:
       - 3306:3306
     restart: always
     secrets:
       - db_root_password
+      - db_user
       - db_password
       - db_name
-      - db_user
 
   adminer:
     image: adminer
@@ -48,3 +38,16 @@ services:
 #      - "3000:3000"
 #    depends_on:
 #      - mysql
+
+volumes:
+  db_data:
+
+secrets:
+  db_password:
+    file: docker-secrets/db_password.txt
+  db_root_password:
+    file: docker-secrets/db_root_password.txt
+  db_name:
+    file: docker-secrets/db_name.txt
+  db_user:
+    file: docker-secrets/db_user.txt
