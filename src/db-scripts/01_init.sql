@@ -1,4 +1,4 @@
-CREATE TABLE images (
+CREATE TABLE IF NOT EXISTS images (
   id INT PRIMARY KEY AUTO_INCREMENT,
   src VARCHAR(255),
   alt VARCHAR(255),
@@ -6,7 +6,7 @@ CREATE TABLE images (
   updated_at TIMESTAMP
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(255) NOT NULL,
   name_seo VARCHAR(255),
@@ -21,7 +21,7 @@ CREATE TABLE users (
   FOREIGN KEY (image_id) REFERENCES images(id)
 );
 
-CREATE TABLE productions (
+CREATE TABLE IF NOT EXISTS productions (
   id INT PRIMARY KEY AUTO_INCREMENT,
   creator_id INT NOT NULL,
   royalty_fees INT DEFAULT 0,
@@ -35,13 +35,13 @@ CREATE TABLE productions (
   FOREIGN KEY (image_id) REFERENCES images(id)
 );
 
-CREATE TABLE available_social_networks (
+CREATE TABLE IF NOT EXISTS available_social_networks (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE social_networks (
+CREATE TABLE IF NOT EXISTS social_networks (
   social_network_id INT NOT NULL,
   user_id INT NOT NULL,
   profile_url VARCHAR(255) NOT NULL,
@@ -52,12 +52,12 @@ CREATE TABLE social_networks (
   FOREIGN KEY (social_network_id) REFERENCES available_social_networks(id)
 );
 
-CREATE TABLE nft_types (
+CREATE TABLE IF NOT EXISTS nft_types (
   id INT PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(15) NOT NULL
 );
 
-CREATE TABLE nfts (
+CREATE TABLE IF NOT EXISTS nfts (
   id INT PRIMARY KEY AUTO_INCREMENT,
   type_id INT NOT NULL,
   name VARCHAR(255) NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE nfts (
   FOREIGN KEY (image_id) REFERENCES images(id)
 );
 
-CREATE TABLE ownerships (
+CREATE TABLE IF NOT EXISTS ownerships (
   id INT PRIMARY KEY AUTO_INCREMENT,
   nft_id INT,
   owner_id INT,
@@ -100,7 +100,7 @@ CREATE TABLE ownerships (
   FOREIGN KEY (owner_id) REFERENCES users(id)
 );
 
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
   id INT PRIMARY KEY AUTO_INCREMENT,
   nft_id INT,
   seller_id INT,
