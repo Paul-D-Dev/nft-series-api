@@ -1,15 +1,8 @@
-import { DbHandler } from "./db.handler";
+import { AbstractRepository } from "../core/abstract.repository";
+import { TablesEnum }         from "../enums/tables.enum";
 
-export class CollectionRepository {
-  protected readonly db: DbHandler;
-  protected GET_BY_ID = 'SELECT * FROM collection WHERE id = ?;'
-
+export class CollectionRepository extends AbstractRepository<any> {
   constructor() {
-    this.db = DbHandler.getInstance();
-  }
-
-  async findById(id: number): Promise<any> {
-    const collection = await this.db.query(this.GET_BY_ID, id);
-    return collection || null;
+    super(TablesEnum.PRODUCTIONS);
   }
 }
