@@ -36,6 +36,7 @@ export abstract class AbstractRepository<T> {
       const result: T[] = await this.db.query(this._GET_BY_ID, id);
       return result[0] || null;
     } catch (e) {
+      // TODO error sql queries
       console.error(`${this._table} findById `, e);
       throw new Error('error');
     }
