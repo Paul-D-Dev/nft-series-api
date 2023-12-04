@@ -1,11 +1,11 @@
 import { Application, Request, Response, Router } from "express";
 import { AbstractService } from "./abstract.service";
 
-export const commonController = <T>(app: Application, service: AbstractService<T>, abstractRouter = Router()) => {
+export const commonController = <T, JSON, DB>(app: Application, service: AbstractService<T, JSON, DB>, abstractRouter = Router()) => {
 
   abstractRouter.get('/', async (req: Request, res: Response) => {
     try {
-      const result: T[] = await service.getAll();
+      const result: JSON[] = await service.getAll();
       return res.send(result);
     } catch (e) {
       console.error('Common controller get: ', e);
@@ -17,11 +17,22 @@ export const commonController = <T>(app: Application, service: AbstractService<T
     const id: number = parseInt(req.params.id, 10);
 
     try {
-      const result: T | null = await service.getById(id);
-      res.send(result);
+      const result: JSON | null = await service.getById(id);
+      res.status(200);
     } catch (e) {
       console.error('Common controller get by ID: ', e);
       return res.status(404).send(`Can not retrieve get element with id: ${id}`)
+    }
+  })
+
+  abstractRouter.post('/', async (req: Request, res: Response) => {
+    const body = req.body;
+    try {
+      await service.post(body);
+      return res.status(201);
+    } catch (e) {
+      console.error('Common controller post: ', e);
+      return res.status(400).json(`Can not post : ${body}`)
     }
   })
 
