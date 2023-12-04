@@ -19,4 +19,8 @@ export abstract class AbstractService<T, JSON, DB> {
   async put(id: number, element: Put<T>): Promise<T> {
     return await this.repository.put(id, element);
   }
+
+  async delete(id: number): Promise<unknown> {
+    return await this.repository.delete(id);
+  }
 }

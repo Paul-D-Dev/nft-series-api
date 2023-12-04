@@ -60,4 +60,8 @@ export abstract class AbstractRepository<T, JSON, DB> {
 
     return await this.db.query(this._UPDATE_BY_ID, [mapEl, id])
   }
+
+  async delete(id: number): Promise<unknown> {
+    return await this.db.query(this._DELETE_BY_ID, id);
+  }
 }

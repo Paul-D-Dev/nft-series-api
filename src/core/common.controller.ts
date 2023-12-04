@@ -43,8 +43,19 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
       await service.put(id, body);
       return res.status(200).send();
     } catch (e) {
-      console.error('Common controller post: ', e);
+      console.error('Common controller put: ', e);
       return res.status(400).json(`Can not update the item with the id : ${id}`)
+    }
+  })
+
+  abstractRouter.delete('/:id', async (req: Request, res: Response) => {
+    const id: number = parseInt(req.params.id, 10);
+    try {
+      await service.delete(id);
+      return res.status(200).send();
+    } catch (e) {
+      console.error('Common controller delete: ', e);
+      return res.status(400).json(`Can not delete the item with the id : ${id}`)
     }
   })
 
