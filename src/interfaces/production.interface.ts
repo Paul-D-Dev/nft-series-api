@@ -1,11 +1,14 @@
+import { Image } from "./image.interface";
+import { User } from "./user.interface";
+
 export interface Production {
-  id: number
-  creator_id: number
-  royalty_fees: number
-  title: string
-  name_seo: string
-  release_year: number
-  image_id: string
-  created_at: string
-  updated_at: string
+  id: number;
+  creator: User;
+  royaltyFees: number;
+  title: string;
+  nameSeo: string;
+  releaseYear: number;
+  image: Image | null;
+  createdAt: string;
+  updateAt: string | null;
 }
