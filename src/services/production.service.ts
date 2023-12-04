@@ -1,9 +1,8 @@
+import { AbstractService } from "../core/abstract.service";
+import { Production } from "../interfaces/production.interface";
 import { ProductionRepository } from "../repositories/production.repository";
 
-export class ProductionService {
-  private readonly _repository = new ProductionRepository();
+export class ProductionService extends AbstractService<Production> {
+  protected repository = new ProductionRepository();
 
-  async getCollectionById(id: number) {
-    return await this._repository.findById(id);
-  }
 }
