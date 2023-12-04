@@ -1,7 +1,7 @@
 import { TablesEnum } from "../enums/tables.enum";
 import { DbHandler } from "../repositories/db.handler";
 import { AbstractModel } from "./abstract.model";
-import { Save } from "../interfaces/http-request";
+import { Put, Save } from "../interfaces/http-request";
 
 export abstract class AbstractRepository<T, JSON, DB> {
   protected constructor(table: TablesEnum) {
@@ -13,7 +13,9 @@ export abstract class AbstractRepository<T, JSON, DB> {
                       WHERE id = ?;`;
     this._POST = `INSERT INTO ${table}
                   SET ?;`;
-    this._UPDATE_BY_ID = `UPDATE ${table} WHERE id = ?;`;
+    this._UPDATE_BY_ID = `UPDATE ${table}
+                          SET ?
+                          WHERE id = ?;`;
     this._DELETE_BY_ID = `DELETE
                           FROM ${table}
                           WHERE id = ?;`;
@@ -48,5 +50,14 @@ export abstract class AbstractRepository<T, JSON, DB> {
   post(element: Save<T>): Promise<unknown> {
     const mapEl = this.model.saveJSONToDb(element);
     return this.db.query(this._POST, mapEl);
+  }
+
+  async put(id: number, element: Put<T>): Promise<T> {
+    const mapEl = this.model.putJSONToDb(element);
+    // TODO try to fix to avoid to use ts-ignore
+    // @ts-ignore
+    Object.keys(mapEl).forEach(key => mapEl[key] === undefined && delete mapEl[key]);
+
+    return await this.db.query(this._UPDATE_BY_ID, [mapEl, id])
   }
 }
