@@ -1,7 +1,9 @@
 import { TablesEnum } from "../enums/tables.enum";
 import { DbHandler } from "../repositories/db.handler";
+import { AbstractModel } from "./abstract.model";
+import { Save } from "../interfaces/http-request";
 
-export abstract class AbstractRepository<T> {
+export abstract class AbstractRepository<T, JSON, DB> {
   protected constructor(table: TablesEnum) {
     this.table = table;
     this.GET_ALL = `SELECT *
@@ -24,16 +26,17 @@ export abstract class AbstractRepository<T> {
   private readonly _POST: string;
   private readonly _UPDATE_BY_ID: string;
   private readonly _DELETE_BY_ID: string;
+  abstract model: AbstractModel<T, DB>
 
 
-  async findAll(): Promise<T[]> {
-    const result: T[] = await this.db.query(this.GET_ALL);
+  async findAll(): Promise<JSON[]> {
+    const result: JSON[] = await this.db.query(this.GET_ALL);
     return Promise.all(result);
   }
 
-  async findById(id: number): Promise<T | null> {
+  async findById(id: number): Promise<JSON | null> {
     try {
-      const result: T[] = await this.db.query(this.GET_BY_ID, id);
+      const result: JSON[] = await this.db.query(this.GET_BY_ID, id);
       return result[0] || null;
     } catch (e) {
       // TODO error sql queries
@@ -42,7 +45,8 @@ export abstract class AbstractRepository<T> {
     }
   }
 
-  post(element: T): Promise<T> {
-    return this.db.query(this._POST, element);
+  post(element: Save<T>): Promise<unknown> {
+    const mapEl = this.model.saveJSONToDb(element);
+    return this.db.query(this._POST, mapEl);
   }
 }
