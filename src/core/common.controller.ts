@@ -23,16 +23,28 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
       console.error('Common controller get by ID: ', e);
       return res.status(404).send(`Can not retrieve get element with id: ${id}`)
     }
-  })
+  });
 
   abstractRouter.post('/', async (req: Request, res: Response) => {
     const body = req.body;
     try {
       await service.post(body);
-      return res.status(201);
+      return res.status(201).send();
     } catch (e) {
       console.error('Common controller post: ', e);
       return res.status(400).json(`Can not post : ${body}`)
+    }
+  });
+
+  abstractRouter.put('/:id', async (req: Request, res: Response) => {
+    const id: number = parseInt(req.params.id, 10);
+    const body = req.body;
+    try {
+      await service.put(id, body);
+      return res.status(201).send();
+    } catch (e) {
+      console.error('Common controller post: ', e);
+      return res.status(400).json(`Can not update the item with the id : ${id}`)
     }
   })
 

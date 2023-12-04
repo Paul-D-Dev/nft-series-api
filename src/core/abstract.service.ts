@@ -1,5 +1,5 @@
 import { AbstractRepository } from "./abstract.repository";
-import { Save } from "../interfaces/http-request";
+import { Put, Save } from "../interfaces/http-request";
 
 export abstract class AbstractService<T, JSON, DB> {
   protected abstract repository: AbstractRepository<T, JSON, DB>;
@@ -14,5 +14,9 @@ export abstract class AbstractService<T, JSON, DB> {
 
   async post(element: Save<T>): Promise<unknown> {
     return await this.repository.post(element);
+  }
+
+  async put(id: number, element: Put<T>): Promise<T> {
+    return await this.repository.put(id, element);
   }
 }
