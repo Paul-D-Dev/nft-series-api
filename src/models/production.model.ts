@@ -1,7 +1,7 @@
 import { AbstractModel } from "../core/abstract.model";
 import { Production } from "../interfaces/production.interface";
-import { DbSave, ProductionDb } from "../interfaces/db";
-import { Save } from "../interfaces/http-request";
+import { DbPut, DbSave, ProductionDb } from "../interfaces/db";
+import { Put, Save } from "../interfaces/http-request";
 
 export class ProductionModel extends AbstractModel<Production, ProductionDb> {
 
@@ -15,6 +15,17 @@ export class ProductionModel extends AbstractModel<Production, ProductionDb> {
       release_year: releaseYear,
       image_id: imageId,
     };
+  }
+
+  putJSONToDb(element: Put<Production>): DbPut<ProductionDb> {
+    return {
+      creator_id: element?.creatorId,
+      royalty_fees: element?.royaltyFees,
+      title: element?.title,
+      name_seo: element?.nameSeo,
+      release_year: element?.releaseYear,
+      image_id: element?.imageId,
+    }
   }
 
 }
