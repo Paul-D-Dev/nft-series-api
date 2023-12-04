@@ -1,19 +1,11 @@
 import { Application, Router } from "express";
-import { ProductionService }   from "../services/production.service";
+import { ProductionService } from "../services/production.service";
+import { commonController } from "../core/common.controller";
 
-export const ProductionController = (app: Application) => {
+export const ProductionController = (app: Application): void => {
   let router: Router = Router();
   const service = new ProductionService();
-
-  router.get('/:id', async (req, res) => {
-    const id = req.params.id
-    try {
-      const result = await service.getCollectionById(+id);
-      res.send(result);
-    } catch (e) {
-      res.status(401)
-    }
-  })
+  commonController(app, service, router);
 
   app.use('/productions', router);
 }
