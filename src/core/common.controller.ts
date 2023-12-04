@@ -41,7 +41,7 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
     const body = req.body;
     try {
       await service.put(id, body);
-      return res.status(201).send();
+      return res.status(200).send();
     } catch (e) {
       console.error('Common controller post: ', e);
       return res.status(400).json(`Can not update the item with the id : ${id}`)
