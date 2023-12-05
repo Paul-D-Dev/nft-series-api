@@ -55,5 +55,5 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            LEFT JOIN images i ON t.image_id = i.id
            LEFT JOIN social_networks sn on t.id = sn.user_id
     WHERE t.id = ?
-    GROUP BY t.id`;
+  `;
 }
