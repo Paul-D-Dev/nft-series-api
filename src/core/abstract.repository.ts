@@ -53,11 +53,7 @@ export abstract class AbstractRepository<T, JSON, DB> {
   }
 
   async put(id: number, element: Put<T>): Promise<T> {
-    const mapEl = this.model.putJSONToDb(element);
-    // TODO try to fix to avoid to use ts-ignore
-    // @ts-ignore
-    Object.keys(mapEl).forEach(key => mapEl[key] === undefined && delete mapEl[key]);
-
+    const mapEl = this.model.put(element);
     return await this.db.query(this._UPDATE_BY_ID, [mapEl, id])
   }
 
