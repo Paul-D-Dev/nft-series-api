@@ -1,4 +1,4 @@
-export interface SocialNetworks {
+export interface SocialNetwork {
   id: number;
   profileUrl: string;
   createdAt: string;

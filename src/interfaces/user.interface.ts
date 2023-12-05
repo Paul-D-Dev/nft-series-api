@@ -1,5 +1,5 @@
 import { Image } from "./image.interface";
-import { SocialNetworks } from "./social-networks.interface";
+import { SocialNetwork } from "./social-network.interface";
 
 export interface User {
   id: string;
@@ -23,5 +23,5 @@ export interface UserJSON {
   image: Image | null;
   createdAt: string;
   updatedAt: string | null;
-  socialNetworks: SocialNetworks[];
+  socialNetworks: SocialNetwork[];
 }
