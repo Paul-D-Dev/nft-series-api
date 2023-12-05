@@ -52,7 +52,7 @@ export abstract class AbstractRepository<T, JSON, DB> {
 
   async post(element: Save<T>): Promise<unknown> {
     try {
-      const mapEl = this.model.saveJSONToDb(element);
+      const mapEl = this.model.save(element);
       return await this.db.query(this._POST, mapEl);
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: post()`, e);

@@ -5,7 +5,7 @@ import { Put, Save } from "../interfaces/http-request";
 
 export class ProductionModel extends AbstractModel<Production, ProductionDb> {
 
-  saveJSONToDb(element: Save<Production>): DbSave<ProductionDb> {
+  mapSaveJSONToDb(element: Save<Production>): DbSave<ProductionDb> {
     const { creatorId, royaltyFees, title, nameSeo, releaseYear, imageId } = element;
     return {
       creator_id: creatorId,
@@ -17,7 +17,7 @@ export class ProductionModel extends AbstractModel<Production, ProductionDb> {
     };
   }
 
-  putJSONToDb(element: Put<Production>): DbPut<ProductionDb> {
+  mapPutJSONToDb(element: Put<Production>): DbPut<ProductionDb> {
     return {
       creator_id: element?.creatorId,
       royalty_fees: element?.royaltyFees,
@@ -25,7 +25,8 @@ export class ProductionModel extends AbstractModel<Production, ProductionDb> {
       name_seo: element?.nameSeo,
       release_year: element?.releaseYear,
       image_id: element?.imageId,
-    }
+      updated_at: this.setUpdateAt()
+    };
   }
 
 }
