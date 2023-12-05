@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS available_social_networks (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE IF NOT EXISTS social_networks (
+CREATE TABLE IF NOT EXISTS user_social_networks (
   social_network_id INT NOT NULL,
   user_id INT NOT NULL,
   profile_url VARCHAR(255) NOT NULL,
@@ -49,6 +49,17 @@ CREATE TABLE IF NOT EXISTS social_networks (
   updated_at TIMESTAMP,
   UNIQUE (user_id, social_network_id),
   FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (social_network_id) REFERENCES available_social_networks(id)
+);
+
+CREATE TABLE IF NOT EXISTS production_social_networks (
+  social_network_id INT NOT NULL,
+  production_id INT NOT NULL,
+  profile_url VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP,
+  UNIQUE (production_id, social_network_id),
+  FOREIGN KEY (production_id) REFERENCES productions(id),
   FOREIGN KEY (social_network_id) REFERENCES available_social_networks(id)
 );
 
