@@ -28,12 +28,16 @@ export abstract class AbstractRepository<T, JSON, DB> {
   private readonly _POST: string;
   private readonly _UPDATE_BY_ID: string;
   private readonly _DELETE_BY_ID: string;
-  abstract model: AbstractModel<T, DB>
+  abstract model: AbstractModel<T, DB>;
 
 
   async findAll(): Promise<JSON[]> {
-    const result: JSON[] = await this.db.query(this.GET_ALL);
-    return Promise.all(result);
+    try {
+      return await this.db.query(this.GET_ALL);
+    } catch (e) {
+      console.error(`FILE AbstractRepository; table: ${this.table}; request: findAll() `, e);
+      throw new Error(`Something wrong the SQL request: ${e}`);
+    }
   }
 
   async findById(id: number): Promise<JSON | null> {
@@ -41,23 +45,37 @@ export abstract class AbstractRepository<T, JSON, DB> {
       const result: JSON[] = await this.db.query(this.GET_BY_ID, id);
       return result[0] || null;
     } catch (e) {
-      // TODO error sql queries
-      console.error(`${this.table} findById `, e);
-      throw new Error('error');
+      console.error(`FILE AbstractRepository; table: ${this.table}; request: findById `, e);
+      throw new Error(`Something wrong the SQL request: ${e}`);
     }
   }
 
-  post(element: Save<T>): Promise<unknown> {
-    const mapEl = this.model.saveJSONToDb(element);
-    return this.db.query(this._POST, mapEl);
+  async post(element: Save<T>): Promise<unknown> {
+    try {
+      const mapEl = this.model.saveJSONToDb(element);
+      return await this.db.query(this._POST, mapEl);
+    } catch (e) {
+      console.error(`FILE AbstractRepository; table: ${this.table}; request: post()`, e);
+      throw new Error(`Something wrong the SQL request: ${e}`);
+    }
   }
 
   async put(id: number, element: Put<T>): Promise<T> {
-    const mapEl = this.model.put(element);
-    return await this.db.query(this._UPDATE_BY_ID, [mapEl, id])
+    try {
+      const mapEl = this.model.put(element);
+      return await this.db.query(this._UPDATE_BY_ID, [mapEl, id]);
+    } catch (e) {
+      console.error(`FILE AbstractRepository; table: ${this.table}; request: put(); `, e);
+      throw new Error(`Something wrong the SQL request: ${e}`);
+    }
   }
 
   async delete(id: number): Promise<unknown> {
-    return await this.db.query(this._DELETE_BY_ID, id);
+    try {
+      return await this.db.query(this._DELETE_BY_ID, id);
+    } catch (e) {
+      console.error(`FILE AbstractRepository; table: ${this.table}; request: delete()`, e);
+      throw new Error(`Something wrong the SQL request: ${e}`);
+    }
   }
 }
