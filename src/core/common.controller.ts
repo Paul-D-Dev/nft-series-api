@@ -1,7 +1,7 @@
 import { Application, Request, Response, Router } from "express";
 import { AbstractService } from "./abstract.service";
 
-export const commonController = <T, JSON, DB>(app: Application, service: AbstractService<T, JSON, DB>, abstractRouter = Router()) => {
+export const commonController = <T, JSON, DB>(app: Application, service: AbstractService<T, JSON, DB>, abstractRouter: Router) => {
 
   abstractRouter.get('/', async (req: Request, res: Response) => {
     try {
