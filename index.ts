@@ -1,7 +1,8 @@
-import express, { Express }     from "express";
-import dotenv                   from "dotenv";
-import loaders                  from "./src/loaders";
+import express, { Express } from "express";
+import dotenv from "dotenv";
+import loaders from "./src/loaders";
 import { ProductionController } from "./src/controllers/production.controller";
+import { UserController } from "./src/controllers/user.controller";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ async function startServer() {
   await loaders(app);
 
   ProductionController(app);
+  UserController(app);
 
   app.listen(port, () => {
     console.log(`The server is running at http://localhost:${port}`);
