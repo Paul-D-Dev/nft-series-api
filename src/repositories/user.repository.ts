@@ -4,7 +4,7 @@ import { UserDb } from "../interfaces/db/user-db.interface";
 import { AbstractModel } from "../core/abstract.model";
 import { UserModel } from "../models/user.model";
 import { TablesEnum } from "../enums/tables.enum";
-import { replaceImageSQL } from "../utils/request-sql/replaceImageSQL";
+import { getJSONImageSQL } from "../utils/request-sql/getJSONImageSQL";
 import { getJsonSocialNetwork } from "../utils/request-sql/getJsonSocialNetwork";
 
 export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
@@ -21,7 +21,7 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            t.bio,
            t.is_verified                AS isVerified,
            t.contract_address           AS contractAddress,
-           ${replaceImageSQL('t', 'i')} AS image,
+           ${getJSONImageSQL('t', 'i')} AS image,
            CASE
              WHEN COUNT(sn.social_network_id) > 0
                THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn')})
@@ -43,7 +43,7 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            t.bio,
            t.is_verified                AS isVerified,
            t.contract_address           AS contractAddress,
-           ${replaceImageSQL('t', 'i')} AS image,
+           ${getJSONImageSQL('t', 'i')} AS image,
            CASE
              WHEN COUNT(sn.social_network_id) > 0
                THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn')})

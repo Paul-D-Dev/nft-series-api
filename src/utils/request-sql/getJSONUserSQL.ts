@@ -1,6 +1,6 @@
-import { replaceImageSQL } from "./replaceImageSQL";
+import { getJSONImageSQL } from "./getJSONImageSQL";
 
-export const replaceUserSQL = (tableUser: string, tableUserImage: string): string => {
+export const getJSONUserSQL = (tableUser: string, tableUserImage: string): string => {
   return `
     JSON_OBJECT(
      'id', ${tableUser}.id,
@@ -9,9 +9,9 @@ export const replaceUserSQL = (tableUser: string, tableUserImage: string): strin
      'bio', ${tableUser}.bio,
      'isVerified', ${tableUser}.is_verified,
      'contractAddress', ${tableUser}.contract_address,
-     'image', ${replaceImageSQL(tableUser, tableUserImage)},
+     'image', ${getJSONImageSQL(tableUser, tableUserImage)},
      'createdAt', ${tableUser}.created_at,
      'updatedAt', ${tableUser}.updated_at
      )
-  `
-}
+  `;
+};
