@@ -30,8 +30,8 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            t.created_at                 AS createdAt,
            t.updated_at                 AS updatedAt
     FROM ${this.table} t
-           LEFT JOIN images i ON t.image_id = i.id
-           LEFT JOIN social_networks sn on t.id = sn.user_id
+           LEFT JOIN ${TablesEnum.IMAGES} i ON t.image_id = i.id
+           LEFT JOIN ${TablesEnum.USER_SOCIAL_NETWORKS} sn on t.id = sn.user_id
          -- Group by because there are many social networks
     GROUP BY t.id
   `;
@@ -52,8 +52,8 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            t.created_at                 AS createdAt,
            t.updated_at                 AS updatedAt
     FROM ${this.table} t
-           LEFT JOIN images i ON t.image_id = i.id
-           LEFT JOIN social_networks sn on t.id = sn.user_id
+           LEFT JOIN ${TablesEnum.IMAGES} i ON t.image_id = i.id
+           LEFT JOIN ${TablesEnum.USER_SOCIAL_NETWORKS} sn on t.id = sn.user_id
     WHERE t.id = ?
   `;
 }
