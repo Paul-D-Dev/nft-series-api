@@ -26,8 +26,8 @@ export class DbHandler {
         connection.query(sql, args, (err, rows) => {
           connection.release();
           if (err) {
-            console.error('query error: ', err);
-            return reject(err);
+            console.error('db.handler; query error: ', err);
+            return reject(err.message);
           }
           resolve(rows);
         });
