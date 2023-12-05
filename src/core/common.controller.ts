@@ -18,7 +18,7 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
 
     try {
       const result: JSON | null = await service.getById(id);
-      res.status(200);
+      res.status(200).send(result);
     } catch (e) {
       console.error('Common controller get by ID: ', e);
       return res.status(404).send(`Can not retrieve get element with id: ${id}`)
