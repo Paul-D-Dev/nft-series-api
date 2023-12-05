@@ -5,6 +5,7 @@ import { AbstractModel } from "../core/abstract.model";
 import { UserModel } from "../models/user.model";
 import { TablesEnum } from "../enums/tables.enum";
 import { replaceImageSQL } from "../utils/request-sql/replaceImageSQL";
+import { getJsonSocialNetwork } from "../utils/request-sql/getJsonSocialNetwork";
 
 export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
   constructor() {
@@ -21,12 +22,38 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            t.is_verified                AS isVerified,
            t.contract_address           AS contractAddress,
            ${replaceImageSQL('t', 'i')} AS image,
+           CASE
+             WHEN COUNT(sn.social_network_id) > 0
+               THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn')})
+             ELSE JSON_ARRAY()
+             END                        AS socialNetworks,
            t.created_at                 AS createdAt,
            t.updated_at                 AS updatedAt
     FROM ${this.table} t
            LEFT JOIN images i ON t.image_id = i.id
+           LEFT JOIN social_networks sn on t.id = sn.user_id
+         -- Group by because there are many social networks
+    GROUP BY t.id
   `;
 
-  GET_BY_ID = `${this.GET_ALL} WHERE t.id = ?;`;
-
+  GET_BY_ID = `
+    SELECT t.id,
+           t.name,
+           t.name_seo                   AS nameSeo,
+           t.bio,
+           t.is_verified                AS isVerified,
+           t.contract_address           AS contractAddress,
+           ${replaceImageSQL('t', 'i')} AS image,
+           CASE
+             WHEN COUNT(sn.social_network_id) > 0
+               THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn')})
+             ELSE JSON_ARRAY()
+             END                        AS socialNetworks,
+           t.created_at                 AS createdAt,
+           t.updated_at                 AS updatedAt
+    FROM ${this.table} t
+           LEFT JOIN images i ON t.image_id = i.id
+           LEFT JOIN social_networks sn on t.id = sn.user_id
+    WHERE t.id = ?
+    GROUP BY t.id`;
 }
