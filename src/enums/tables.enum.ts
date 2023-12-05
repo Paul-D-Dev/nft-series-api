@@ -5,7 +5,9 @@ export enum TablesEnum {
   NFTS = 'nfts',
   OWNERSHIPS = 'ownerships',
   PRODUCTIONS = 'productions',
+  PRODUCTION_SOCIAL_NETWORKS = 'production_social_networks',
   SOCIAL_NETWORKS = 'social_networks',
   TRANSACTIONS = 'transactions',
-  USERS = 'users'
+  USERS = 'users',
+  USER_SOCIAL_NETWORKS = 'user_social_networks',
 }
