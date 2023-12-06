@@ -17,13 +17,18 @@ export class UserSocialNetworkRepository {
     UPDATE ${this._table}
     SET ?
     WHERE user_id = ?
-      AND social_network_id = ?
+      AND social_network_id = ?;
+  `;
+  private readonly _DELETE = `
+    DELETE
+    FROM ${this._table}
+    WHERE user_id = ?
+      AND social_network_id = ?;
   `;
 
 
   async post(element: UserSocialNetwork): Promise<any> {
     try {
-      console.log('POST?');
       const mapEl = this._model.save(element);
       return await this._db.query(this._POST, mapEl);
     } catch (e) {
@@ -37,5 +42,11 @@ export class UserSocialNetworkRepository {
     return await this._db.query(this._UPDATE, [mapEl, userId, socialId]);
   }
 
-  //@TODO delete
+  async delete(userId: number, socialId: number): Promise<any> {
+    try {
+      return await this._db.query(this._DELETE, [userId, socialId]);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

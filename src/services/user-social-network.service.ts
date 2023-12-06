@@ -18,5 +18,11 @@ export class UserSocialNetworkService {
     return await this.repository.put(userId, socialId, element);
   }
 
-  //@TODO delete
+  async delete(userId: number, socialId: number): Promise<any> {
+    try {
+      return await this.repository.delete(userId, socialId);
+    } catch (e) {
+      throw e;
+    }
+  }
 }

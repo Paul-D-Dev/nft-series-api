@@ -30,16 +30,17 @@ export const UserSocialNetworkController = (app: Application): void => {
     }
   });
 
-  // router.delete('/user/:userId/social-network/:socialId', async (req: Request, res: Response) => {
-  //   const id: number = parseInt(req.params.id);
-  //   try {
-  //     await service.delete(id);
-  //     return res.status(200).send();
-  //   } catch (e) {
-  //     console.error('User Social Network  delete: ', e);
-  //     return res.status(500).json({ message: 'Server Error' });
-  //   }
-  // });
+  router.delete('/user/:userId/social-network/:socialId', async (req: Request, res: Response) => {
+    const userId: number = parseInt(req.params.userId);
+    const socialId: number = parseInt(req.params.socialId);
+    try {
+      await service.delete(userId, socialId);
+      return res.status(200).send();
+    } catch (e) {
+      console.error('User Social Network  delete: ', e);
+      return res.status(500).json({ message: 'Server Error' });
+    }
+  });
 
   app.use('/user-social-networks', router);
 };
