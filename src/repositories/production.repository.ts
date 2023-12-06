@@ -15,7 +15,7 @@ export class ProductionRepository extends AbstractRepository<Production, Product
 
   GET_ALL: string = `
     SELECT t.id,
-           t.royalty_fees               AS royaltyFess,
+           t.royalty_fees               AS royaltyFees,
            t.title,
            t.name_seo                   AS nameSeo,
            t.release_year               AS releaseYear,
