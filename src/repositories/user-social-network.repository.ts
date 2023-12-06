@@ -38,8 +38,12 @@ export class UserSocialNetworkRepository {
   }
 
   async put(userId: number, socialId: number, element: PutUserSocialNetwork): Promise<any> {
-    const mapEl = this._model.put(element);
-    return await this._db.query(this._UPDATE, [mapEl, userId, socialId]);
+    try {
+      const mapEl = this._model.put(element);
+      return await this._db.query(this._UPDATE, [mapEl, userId, socialId]);
+    } catch (e) {
+      throw e;
+    }
   }
 
   async delete(userId: number, socialId: number): Promise<any> {
