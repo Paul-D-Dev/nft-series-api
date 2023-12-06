@@ -1,6 +1,6 @@
-// @TODO add "name" from available social network table
 export interface SocialNetwork {
   socialNetworkId: number;
+  name: string;
   profileUrl: string;
   createdAt: string;
   updateAt: string | null;
