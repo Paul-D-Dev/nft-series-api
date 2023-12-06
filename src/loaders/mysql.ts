@@ -1,5 +1,5 @@
 import mysql, { Pool } from 'mysql2';
-import { DbHandler }   from "../repositories/db.handler";
+import { DbHandler } from "../repositories/db.handler";
 
 export default async (): Promise<Pool> => {
   const pool = mysql.createPool({

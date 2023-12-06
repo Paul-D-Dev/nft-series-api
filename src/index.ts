@@ -10,7 +10,11 @@ dotenv.config();
 async function startServer() {
   const app: Express = express();
   const port = process.env.PORT;
-  await loaders(app);
+  try {
+    await loaders(app);
+  } catch (e) {
+    console.error(e);
+  }
 
   ProductionController(app);
   UserController(app);
