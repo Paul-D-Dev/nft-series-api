@@ -1,4 +1,4 @@
-export const replaceImageSQL = (tableProvider: string, tableImage: string): string => {
+export const getJSONImageSQL = (tableProvider: string, tableImage: string): string => {
   return `
    CASE
      WHEN ${tableProvider}.image_id IS NOT NULL
@@ -12,4 +12,4 @@ export const replaceImageSQL = (tableProvider: string, tableImage: string): stri
      ELSE NULL
    END
   `;
-}
+};

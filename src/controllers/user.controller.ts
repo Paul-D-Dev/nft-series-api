@@ -1,11 +1,11 @@
 import { Application, Router } from "express";
-import { ImageService } from "../services/image.service";
+import { UserService } from "../services/user.service";
 import { commonController } from "../core/common.controller";
 
-export const ImageController = (app: Application) => {
+export const UserController = (app: Application) => {
   let router: Router = Router();
-  const service = new ImageService();
+  const service = new UserService();
   commonController(app, service, router);
 
-  app.use('/images', router);
-};
+  app.use('/users', router);
+}

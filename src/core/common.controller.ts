@@ -1,15 +1,15 @@
 import { Application, Request, Response, Router } from "express";
 import { AbstractService } from "./abstract.service";
 
-export const commonController = <T, JSON, DB>(app: Application, service: AbstractService<T, JSON, DB>, abstractRouter = Router()) => {
+export const commonController = <T, JSON, DB>(app: Application, service: AbstractService<T, JSON, DB>, abstractRouter: Router) => {
 
   abstractRouter.get('/', async (req: Request, res: Response) => {
     try {
       const result: JSON[] = await service.getAll();
       return res.send(result);
     } catch (e) {
-      console.error('Common controller get: ', e);
-      return res.status(404).send('Can not retrieve get all')
+      console.error('Common controller getAll: ', e);
+      return res.status(500).json({ message: 'Server Error' });
     }
   });
 
@@ -18,10 +18,13 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
 
     try {
       const result: JSON | null = await service.getById(id);
-      res.status(200);
+      if (result === null) {
+        return res.status(404).json({ message: 'Can not find the element with id' });
+      }
+      return res.status(200).send(result);
     } catch (e) {
       console.error('Common controller get by ID: ', e);
-      return res.status(404).send(`Can not retrieve get element with id: ${id}`)
+      return res.status(500).json({ message: 'Server Error' });
     }
   });
 
@@ -32,7 +35,7 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
       return res.status(201).send();
     } catch (e) {
       console.error('Common controller post: ', e);
-      return res.status(400).json(`Can not post : ${body}`)
+      return res.status(500).json({ message: 'Server Error' });
     }
   });
 
@@ -44,9 +47,9 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
       return res.status(200).send();
     } catch (e) {
       console.error('Common controller put: ', e);
-      return res.status(400).json(`Can not update the item with the id : ${id}`)
+      return res.status(500).json({ message: 'Server Error' });
     }
-  })
+  });
 
   abstractRouter.delete('/:id', async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id, 10);
@@ -55,8 +58,8 @@ export const commonController = <T, JSON, DB>(app: Application, service: Abstrac
       return res.status(200).send();
     } catch (e) {
       console.error('Common controller delete: ', e);
-      return res.status(400).json(`Can not delete the item with the id : ${id}`)
+      return res.status(500).json({ message: 'Server Error' });
     }
-  })
+  });
 
-}
+};

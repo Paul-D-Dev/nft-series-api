@@ -1,11 +1,19 @@
 import { Application } from "express";
-import expressLoader   from './express';
-import dbLoader        from './mysql';
+import expressLoader from './express';
+import dbLoader from './mysql';
 
 export default async (app: Application) => {
-  await expressLoader(app);
-  console.log('Express Initialized');
+  try {
+    await expressLoader(app);
+    console.log('Express Initialized');
+  } catch (e) {
+    throw new Error(`Something wrong with init Express: ${e}`);
+  }
 
-  await dbLoader();
-  console.log('Database Initialized');
+  try {
+    await dbLoader();
+    console.log('Database Initialized');
+  } catch (e) {
+    throw new Error(`Something wrong with init DB: ${e}`);
+  }
 }

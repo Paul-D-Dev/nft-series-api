@@ -4,14 +4,14 @@ import { DbPut, DbSave, ImageDb } from "../interfaces/db";
 import { Put, Save } from "../interfaces/http-request";
 
 export class ImageModel extends AbstractModel<Image, ImageDb> {
-  putJSONToDb(element: Put<Image>): DbPut<ImageDb> {
+  mapPutJSONToDb(element: Put<Image>): DbPut<ImageDb> {
     return {
       src: element?.src,
       alt: element?.alt
     };
   }
 
-  saveJSONToDb(element: Save<Image>): DbSave<ImageDb> {
+  mapSaveJSONToDb(element: Save<Image>): DbSave<ImageDb> {
     return {
       src: element.src,
       alt: element.alt
