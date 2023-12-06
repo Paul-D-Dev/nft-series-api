@@ -27,6 +27,7 @@ export class DbHandler {
           connection.release();
           if (err) {
             console.error('db.handler; query error: ', err);
+            //@TODO handle error Duplicate
             return reject(err.message);
           }
           resolve(rows);
