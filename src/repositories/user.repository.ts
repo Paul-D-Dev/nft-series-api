@@ -24,7 +24,7 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            ${getJSONImageSQL('t', 'i')} AS image,
            CASE
              WHEN COUNT(sn.social_network_id) > 0
-               THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn')})
+               THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn', 'asn')})
              ELSE JSON_ARRAY()
              END                        AS socialNetworks,
            t.created_at                 AS createdAt,
@@ -32,6 +32,7 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
     FROM ${this.table} t
            LEFT JOIN ${TablesEnum.IMAGES} i ON t.image_id = i.id
            LEFT JOIN ${TablesEnum.USER_SOCIAL_NETWORKS} sn on t.id = sn.user_id
+           LEFT JOIN ${TablesEnum.AVAILABLE_SOCIAL_NETWORKS} asn ON sn.social_network_id = asn.id
          -- Group by because there are many social networks
     GROUP BY t.id
   `;
@@ -46,7 +47,7 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
            ${getJSONImageSQL('t', 'i')} AS image,
            CASE
              WHEN COUNT(sn.social_network_id) > 0
-               THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn')})
+               THEN JSON_ARRAYAGG(${getJsonSocialNetwork('sn', 'asn')})
              ELSE JSON_ARRAY()
              END                        AS socialNetworks,
            t.created_at                 AS createdAt,
@@ -54,6 +55,7 @@ export class UserRepository extends AbstractRepository<User, UserJSON, UserDb> {
     FROM ${this.table} t
            LEFT JOIN ${TablesEnum.IMAGES} i ON t.image_id = i.id
            LEFT JOIN ${TablesEnum.USER_SOCIAL_NETWORKS} sn on t.id = sn.user_id
+           LEFT JOIN ${TablesEnum.AVAILABLE_SOCIAL_NETWORKS} asn ON sn.social_network_id = asn.id
     WHERE t.id = ?
   `;
 }
