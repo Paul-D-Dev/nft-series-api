@@ -15,7 +15,11 @@ export class UserSocialNetworkService {
   }
 
   async put(userId: number, socialId: number, element: any): Promise<any> {
-    return await this.repository.put(userId, socialId, element);
+    try {
+      return await this.repository.put(userId, socialId, element);
+    } catch (e) {
+      throw e;
+    }
   }
 
   async delete(userId: number, socialId: number): Promise<any> {
