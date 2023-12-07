@@ -24,7 +24,7 @@ export const UserController = (app: Application) => {
         const imageBody: Partial<Image> = {
           alt: body.image.alt
         };
-        const imageId = await imageService.post(imageBody, imageFile!.path);
+        const imageId = await imageService.post(imageBody, imageFile.path);
         const newUser = {
           ...body,
           imageId
