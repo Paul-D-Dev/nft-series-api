@@ -15,7 +15,12 @@ export const ImageController = (app: Application) => {
       const result = await service.getById(id);
       return res.status(200).send(result);
     } catch (e) {
-      return res.status(500).json({ message: 'Something wrong with the server' });
+      if (e instanceof CustomError) {
+        return res.status(e.status).json({ message: e.message });
+      } else {
+        console.log('Image controller - GET BY ID || Error: ', e);
+        return res.status(500).json({ message: 'Something wrong with the server' });
+      }
     }
 
   });
@@ -32,7 +37,11 @@ export const ImageController = (app: Application) => {
       await service.post(body, file.path);
       return res.status(201).end();
     } catch (e) {
-      return res.status(500).json({ message: 'Can not upload the image' });
+      if (e instanceof CustomError) {
+        return res.status(e.status).json({ message: e.message });
+      } else {
+        return res.status(500).json({ message: 'Can not upload the image' });
+      }
     }
   });
 
