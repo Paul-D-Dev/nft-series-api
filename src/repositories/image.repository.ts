@@ -5,6 +5,7 @@ import { ImageModel } from "../models/image.model";
 import { DbHandler } from "./db.handler";
 import { TablesEnum } from "../enums/tables.enum";
 import { ResultSetHeader } from "mysql2";
+import { CustomError } from "../models/custom-error.model";
 
 export class ImageRepository {
 
@@ -21,6 +22,11 @@ export class ImageRepository {
     INSERT INTO ${this._table}
     SET ?;
   `;
+  private _DELETE = `
+    DELETE
+    FROM ${this._table}
+    WHERE id = ?;
+  `;
 
   async getById(id: number): Promise<any> {
     try {
@@ -35,6 +41,21 @@ export class ImageRepository {
     try {
       const result: ResultSetHeader = await this.db.query(this._POST, element);
       return result.insertId;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async delete(id: number): Promise<any> {
+    try {
+      const result: ResultSetHeader = await this.db.query(this._DELETE, id);
+      return new Promise((resolve, reject) => {
+        if (result.affectedRows === 1) {
+          return resolve(result);
+        } else {
+          return reject(new CustomError(404, 'CAN NOT FIND THE ELEMENT'));
+        }
+      });
     } catch (e) {
       throw e;
     }

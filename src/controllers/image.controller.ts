@@ -1,6 +1,7 @@
 import { Application, Request, Response, Router } from "express";
 import { ImageService } from "../services/image.service";
 import { uploadImage } from "../middlewares/upload-image";
+import { CustomError } from "../models/custom-error.model";
 
 
 export const ImageController = (app: Application) => {
@@ -28,7 +29,21 @@ export const ImageController = (app: Application) => {
     } catch (e) {
       return res.status(500).json({ message: 'Can not upload the image' });
     }
+  });
 
+  router.delete('/:id', async (req: Request, res: Response) => {
+    try {
+      const id = parseInt(req.params.id);
+      await service.delete(id);
+      return res.end();
+    } catch (e) {
+      if (e instanceof CustomError) {
+        return res.status(e.status).json({ message: e.message });
+      } else {
+        console.log('Image controller - Delete || Error: ', e);
+        return res.status(500).json({ message: 'Something wrong with the server' });
+      }
+    }
   });
 
   app.use('/images', router);

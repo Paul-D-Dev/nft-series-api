@@ -14,4 +14,12 @@ export class ImageService {
     };
     return await this.repository.post(element);
   }
+
+  async delete(id: number): Promise<any> {
+    try {
+      return await this.repository.delete(id);
+    } catch (e) {
+      throw e;
+    }
+  }
 }
