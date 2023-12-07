@@ -1,4 +1,5 @@
 import { ImageRepository } from "../repositories/image.repository";
+import { handleCatchError } from "../utils/handleCatchError";
 
 export class ImageService {
   protected repository = new ImageRepository();
@@ -7,19 +8,16 @@ export class ImageService {
     try {
       return await this.repository.getById(id);
     } catch (e) {
-      throw e;
+      return handleCatchError(e);
     }
   }
 
   async post(body: any, path: string): Promise<number> {
+    const element = { ...body, src: path };
     try {
-      const element = {
-        ...body,
-        src: path
-      };
       return await this.repository.post(element);
     } catch (e) {
-      throw e;
+      return handleCatchError(e);
     }
   }
 
@@ -27,7 +25,7 @@ export class ImageService {
     try {
       return await this.repository.delete(id);
     } catch (e) {
-      throw e;
+      return handleCatchError(e);
     }
   }
 }
