@@ -1,5 +1,6 @@
 node_modules
 docker-secrets
+dist
+uploads
 .idea
 .env
-dist
