@@ -7,7 +7,7 @@ const storage = multer.diskStorage({
     cb(null, './uploads/');
   },
   filename(req: Request, file: Express.Multer.File, callback: (error: (Error | null), filename: string) => void) {
-    callback(null, file.fieldname + '-' + Date.now() + '.' + path.extname(file.originalname).toLowerCase());
+    callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname).toLowerCase());
   }
 });
 
@@ -40,6 +40,5 @@ export const uploadImage = () => {
         next();
       }
     });
-
   };
 };
