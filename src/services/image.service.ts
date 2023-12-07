@@ -1,9 +1,17 @@
-import { AbstractService } from "../core/abstract.service";
-import { Image, ImageJSON } from "../interfaces/image.interface";
-import { ImageDb } from "../interfaces/db";
-import { AbstractRepository } from "../core/abstract.repository";
 import { ImageRepository } from "../repositories/image.repository";
 
-export class ImageService extends AbstractService<Image, ImageJSON, ImageDb> {
-  protected repository: AbstractRepository<Image, ImageJSON, ImageDb> = new ImageRepository();
+export class ImageService {
+  protected repository = new ImageRepository();
+
+  async getById(id: number) {
+    return await this.repository.getById(id);
+  }
+
+  async post(body: any, path: string): Promise<number> {
+    const element = {
+      ...body,
+      src: path
+    };
+    return await this.repository.post(element);
+  }
 }
