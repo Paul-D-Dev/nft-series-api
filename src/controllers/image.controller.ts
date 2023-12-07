@@ -10,8 +10,13 @@ export const ImageController = (app: Application) => {
 
   router.get('/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const result = await service.getById(id);
-    return res.status(200).send(result);
+
+    try {
+      const result = await service.getById(id);
+      return res.status(200).send(result);
+    } catch (e) {
+      return res.status(500).json({ message: 'Something wrong with the server' });
+    }
 
   });
 

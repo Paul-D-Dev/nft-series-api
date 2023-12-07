@@ -4,15 +4,23 @@ export class ImageService {
   protected repository = new ImageRepository();
 
   async getById(id: number) {
-    return await this.repository.getById(id);
+    try {
+      return await this.repository.getById(id);
+    } catch (e) {
+      throw e;
+    }
   }
 
   async post(body: any, path: string): Promise<number> {
-    const element = {
-      ...body,
-      src: path
-    };
-    return await this.repository.post(element);
+    try {
+      const element = {
+        ...body,
+        src: path
+      };
+      return await this.repository.post(element);
+    } catch (e) {
+      throw e;
+    }
   }
 
   async delete(id: number): Promise<any> {
