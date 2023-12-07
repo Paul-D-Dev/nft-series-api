@@ -13,7 +13,7 @@ export const ImageController = (app: Application) => {
 
     try {
       const result = await service.getById(id);
-      return res.status(200).send(result);
+      return res.send(result);
     } catch (e) {
       if (e instanceof CustomError) {
         return res.status(e.status).json({ message: e.message });
