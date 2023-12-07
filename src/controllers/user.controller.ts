@@ -4,11 +4,17 @@ import { CustomError } from "../models/custom-error.model";
 import { ImageService } from "../services/image.service";
 import { Image } from "../interfaces/image.interface";
 import { uploadImage } from "../middlewares/upload-image";
+import { commonDeleteController, commonGetByIdController, commonGetController, commonPutController } from "./common";
 
 export const UserController = (app: Application) => {
   let router: Router = Router();
   const service = new UserService();
   const imageService = new ImageService();
+
+  commonGetController(app, service, router);
+  commonGetByIdController(app, service, router);
+  commonPutController(app, service, router);
+  commonDeleteController(app, service, router);
 
   router.post('/', uploadImage(), async (req: Request, res: Response) => {
     try {
