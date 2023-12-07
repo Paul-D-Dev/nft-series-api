@@ -6,6 +6,7 @@ import { DbHandler } from "./db.handler";
 import { TablesEnum } from "../enums/tables.enum";
 import { ResultSetHeader } from "mysql2";
 import { CustomError } from "../models/custom-error.model";
+import { handleCatchError } from "../utils/handleCatchError";
 
 export class ImageRepository {
 
@@ -30,10 +31,15 @@ export class ImageRepository {
 
   async getById(id: number): Promise<any> {
     try {
-      const results = await this.db.query(this._GET_BY_ID, id);
-      return await results[0] || null;
+      const results: any[] = await this.db.query(this._GET_BY_ID, id);
+      console.log(results);
+      if (results.length === 0) {
+        console.error('ImageRepository - CAN NOT FIND THE ITEM WITH ID: ', id);
+        throw new CustomError(404, 'CAN NOT FIND THE ELEMENT');
+      }
+      return results[0];
     } catch (e) {
-      throw e;
+      return handleCatchError(e);
     }
   }
 
@@ -42,22 +48,20 @@ export class ImageRepository {
       const result: ResultSetHeader = await this.db.query(this._POST, element);
       return result.insertId;
     } catch (e) {
-      throw e;
+      return handleCatchError(e);
     }
   }
 
   async delete(id: number): Promise<any> {
     try {
       const result: ResultSetHeader = await this.db.query(this._DELETE, id);
-      return new Promise((resolve, reject) => {
-        if (result.affectedRows === 1) {
-          return resolve(result);
-        } else {
-          return reject(new CustomError(404, 'CAN NOT FIND THE ELEMENT'));
-        }
-      });
+      if (result.affectedRows === 0) {
+        console.error('ImageRepository - CAN NOT FIND THE ITEM WITH ID: ', id);
+
+        throw new CustomError(404, 'CAN NOT FIND THE ELEMENT');
+      }
     } catch (e) {
-      throw e;
+      return handleCatchError(e);
     }
   }
 
