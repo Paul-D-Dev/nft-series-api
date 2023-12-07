@@ -23,13 +23,21 @@ export class ImageRepository {
   `;
 
   async getById(id: number): Promise<any> {
-    const results = await this.db.query(this._GET_BY_ID, id);
-    return await results[0] || null;
+    try {
+      const results = await this.db.query(this._GET_BY_ID, id);
+      return await results[0] || null;
+    } catch (e) {
+      throw e;
+    }
   }
 
   async post(element: any): Promise<number> {
-    const result: ResultSetHeader = await this.db.query(this._POST, element);
-    return result.insertId;
+    try {
+      const result: ResultSetHeader = await this.db.query(this._POST, element);
+      return result.insertId;
+    } catch (e) {
+      throw e;
+    }
   }
 
 }
