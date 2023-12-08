@@ -5,7 +5,7 @@ import { ImageService } from "../services/image.service";
 import { Image } from "../interfaces/image.interface";
 import { uploadImage } from "../middlewares/upload-image";
 import { commonDeleteController, commonGetByIdController, commonGetController, commonPutController } from "./common";
-import { User } from "../interfaces/user.interface";
+import { User, UserToDb } from "../interfaces/user.interface";
 
 export const UserController = (app: Application) => {
   let router: Router = Router();
@@ -20,16 +20,17 @@ export const UserController = (app: Application) => {
   router.post('/', uploadImage(), async (req: Request, res: Response) => {
     try {
       const imageFile: Express.Multer.File | undefined = req.file;
-      // type body with user
       const body: User = req.body;
       if (body.image && imageFile) {
         const imageBody: Partial<Image> = {
           alt: body.image.alt
         };
-        const imageId = await imageService.post(imageBody, imageFile.path);
-        const newUser = {
+        const imageId: number = await imageService.post(imageBody, imageFile.path);
+        const newUser: UserToDb = {
           ...body,
-          imageId
+          image: {
+            id: imageId
+          }
         };
         await service.post(newUser);
       } else {
