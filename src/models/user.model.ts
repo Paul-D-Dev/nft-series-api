@@ -1,11 +1,11 @@
 import { AbstractModel } from "../core/abstract.model";
-import { User } from "../interfaces/user.interface";
+import { UserToDb } from "../interfaces/user.interface";
 import { UserDb } from "../interfaces/db/user-db.interface";
 import { Put, Save } from "../interfaces/http-request";
 import { DbPut, DbSave } from "../interfaces/db";
 
-export class UserModel extends AbstractModel<User, UserDb> {
-  mapPutJSONToDb(element: Put<User>): DbPut<UserDb> {
+export class UserModel extends AbstractModel<UserToDb, UserDb> {
+  mapPutJSONToDb(element: Put<UserToDb>): DbPut<UserDb> {
     return {
       name: element?.name,
       name_seo: element?.nameSeo,
@@ -17,7 +17,7 @@ export class UserModel extends AbstractModel<User, UserDb> {
     };
   }
 
-  mapSaveJSONToDb(element: Save<User>): DbSave<UserDb> {
+  mapSaveJSONToDb(element: Save<UserToDb>): DbSave<UserDb> {
     return {
       name: element.name,
       name_seo: element.nameSeo,
