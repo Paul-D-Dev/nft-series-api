@@ -3,11 +3,11 @@ export interface ProductionDb {
   creator_id: number;
   royalty_fees: number;
   title: string;
-  name_seo: string;
-  release_year: number;
-  image_id: number;
+  name_seo: string | null;
+  release_year: number | null;
+  image_id: number | null;
   created_at: string;
-  updated_at: string;
+  updated_at: string | null;
 }
 
 
