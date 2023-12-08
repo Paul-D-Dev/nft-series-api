@@ -12,7 +12,7 @@ export class UserModel extends AbstractModel<User, UserDb> {
       bio: element?.bio,
       is_verified: element?.isVerified,
       contract_address: element?.contractAddress,
-      image_id: element?.imageId,
+      image_id: element?.image?.id,
       updated_at: this.setUpdateAt()
     };
   }
@@ -24,7 +24,7 @@ export class UserModel extends AbstractModel<User, UserDb> {
       bio: element.bio,
       is_verified: false,
       contract_address: element.contractAddress,
-      image_id: element.imageId
+      image_id: element.image?.id || null
     };
   }
 
