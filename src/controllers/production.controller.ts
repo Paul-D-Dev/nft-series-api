@@ -13,6 +13,8 @@ export const ProductionController = (app: Application): void => {
   const service = new ProductionService();
   commonGetController(app, service, router);
   commonGetByIdController(app, service, router);
+
+  // @TODO create post with image production
   commonPostController(app, service, router);
   commonPutController(app, service, router);
   commonDeleteController(app, service, router);
