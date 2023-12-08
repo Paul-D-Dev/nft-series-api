@@ -2,8 +2,17 @@ import { TablesEnum } from "../enums/tables.enum";
 import { DbHandler } from "../repositories/db.handler";
 import { AbstractModel } from "./abstract.model";
 import { Put, Save } from "../interfaces/http-request";
+import { Conditional } from "../types";
+import { ResultSetHeader } from "mysql2";
+import { CustomError } from "../models/custom-error.model";
+import { handleCatchError } from "../utils/handleCatchError";
 
-export abstract class AbstractRepository<T, DB> {
+/**
+ * - T: Type we will return to the client
+ * - DB: Type we will register in the DB
+ * - P: Type for the request Post or Put, if P = void then we will use T
+ */
+export abstract class AbstractRepository<T, DB, P = void> {
   protected constructor(table: TablesEnum) {
     this.table = table;
     this.GET_ALL = `SELECT *
@@ -25,10 +34,10 @@ export abstract class AbstractRepository<T, DB> {
   protected readonly table: TablesEnum;
   protected GET_ALL: string;
   protected GET_BY_ID: string;
-  private readonly _POST: string;
+  protected readonly _POST: string;
   private readonly _UPDATE_BY_ID: string;
   private readonly _DELETE_BY_ID: string;
-  abstract model: AbstractModel<T, DB>;
+  abstract readonly model: AbstractModel<Conditional<P, T>, DB>;
 
 
   async findAll(): Promise<T[]> {
@@ -36,46 +45,56 @@ export abstract class AbstractRepository<T, DB> {
       return await this.db.query(this.GET_ALL);
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: findAll() `, e);
-      throw new Error(`Something wrong the SQL request: ${e}`);
+      throw handleCatchError(e);
     }
   }
 
   async findById(id: number): Promise<T | null> {
     try {
-      const result: T[] = await this.db.query(this.GET_BY_ID, id);
-      return result[0] || null;
+      const results: T[] = await this.db.query(this.GET_BY_ID, id);
+      if (results.length === 0) {
+        console.error('Abstract Repository - CAN NOT FIND THE ITEM WITH ID: ', id);
+        throw new CustomError(404, 'CAN NOT FIND THE ELEMENT');
+      }
+      return results[0];
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: findById `, e);
-      throw new Error(`Something wrong the SQL request: ${e}`);
+      throw handleCatchError(e);
     }
   }
 
-  async post(element: Save<T>): Promise<unknown> {
+  async post(element: Save<Conditional<P, T>>): Promise<number> {
     try {
       const mapEl = this.model.save(element);
-      return await this.db.query(this._POST, mapEl);
+      const result: ResultSetHeader = await this.db.query(this._POST, mapEl);
+      return result.insertId;
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: post()`, e);
-      throw new Error(`Something wrong the SQL request: ${e}`);
+      throw handleCatchError(e);
     }
   }
 
-  async put(id: number, element: Put<T>): Promise<unknown> {
+  async put(id: number, element: Put<Conditional<P, T>>): Promise<unknown> {
     try {
       const mapEl = this.model.put(element);
       return await this.db.query(this._UPDATE_BY_ID, [mapEl, id]);
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: put(); `, e);
-      throw new Error(`Something wrong the SQL request: ${e}`);
+      throw handleCatchError(e);
     }
   }
 
   async delete(id: number): Promise<unknown> {
     try {
-      return await this.db.query(this._DELETE_BY_ID, id);
+      const result: ResultSetHeader = await this.db.query(this._DELETE_BY_ID, id);
+      if (result.affectedRows === 0) {
+        console.error('Abstract Repository - CAN NOT FIND THE ITEM WITH ID: ', id);
+        throw new CustomError(404, 'CAN NOT FIND THE ELEMENT');
+      }
+      return result;
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: delete()`, e);
-      throw new Error(`Something wrong the SQL request: ${e}`);
+      throw handleCatchError(e);
     }
   }
 }
