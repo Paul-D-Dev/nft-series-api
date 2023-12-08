@@ -1,7 +1,7 @@
 import { Application, Request, Response, Router } from "express";
 import { AbstractService } from "../../core/abstract.service";
 
-export const commonPutController = <T, JSON, DB>(app: Application, service: AbstractService<T, JSON, DB>, abstractRouter: Router) => {
+export const commonPutController = <T, DB>(app: Application, service: AbstractService<T, DB>, abstractRouter: Router) => {
 
   abstractRouter.put('/:id', async (req: Request, res: Response) => {
     const id: number = parseInt(req.params.id, 10);
