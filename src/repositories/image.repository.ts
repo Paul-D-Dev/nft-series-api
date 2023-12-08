@@ -29,10 +29,9 @@ export class ImageRepository {
     WHERE id = ?;
   `;
 
-  async getById(id: number): Promise<any> {
+  async getById(id: number): Promise<Image> {
     try {
-      const results: any[] = await this.db.query(this._GET_BY_ID, id);
-      console.log(results);
+      const results: Image[] = await this.db.query(this._GET_BY_ID, id);
       if (results.length === 0) {
         console.error('ImageRepository - CAN NOT FIND THE ITEM WITH ID: ', id);
         throw new CustomError(404, 'CAN NOT FIND THE ELEMENT');
@@ -52,13 +51,14 @@ export class ImageRepository {
     }
   }
 
-  async delete(id: number): Promise<any> {
+  async delete(id: number): Promise<unknown> {
     try {
       const result: ResultSetHeader = await this.db.query(this._DELETE, id);
       if (result.affectedRows === 0) {
         console.error('ImageRepository - CAN NOT FIND THE ITEM WITH ID: ', id);
-
         throw new CustomError(404, 'CAN NOT FIND THE ELEMENT');
+      } else {
+        return result;
       }
     } catch (e) {
       return handleCatchError(e);
