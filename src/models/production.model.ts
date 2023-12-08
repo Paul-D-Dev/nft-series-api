@@ -1,11 +1,11 @@
 import { AbstractModel } from "../core/abstract.model";
-import { Production } from "../interfaces/production.interface";
+import { ProductionToDb } from "../interfaces/production.interface";
 import { DbPut, DbSave, ProductionDb } from "../interfaces/db";
 import { Put, Save } from "../interfaces/http-request";
 
-export class ProductionModel extends AbstractModel<Production, ProductionDb> {
+export class ProductionModel extends AbstractModel<ProductionToDb, ProductionDb> {
 
-  mapSaveJSONToDb(element: Save<Production>): DbSave<ProductionDb> {
+  mapSaveJSONToDb(element: Save<ProductionToDb>): DbSave<ProductionDb> {
     const { creator, royaltyFees, title, nameSeo, releaseYear, image } = element;
     return {
       creator_id: creator.id,
@@ -17,7 +17,7 @@ export class ProductionModel extends AbstractModel<Production, ProductionDb> {
     };
   }
 
-  mapPutJSONToDb(element: Put<Production>): DbPut<ProductionDb> {
+  mapPutJSONToDb(element: Put<ProductionToDb>): DbPut<ProductionDb> {
     return {
       creator_id: element?.creator?.id,
       royalty_fees: element?.royaltyFees,

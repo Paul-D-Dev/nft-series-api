@@ -1,14 +1,17 @@
 import { Image } from "./image.interface";
 import { User } from "./user.interface";
 
-export interface Production {
+interface _Production<UserType, ImageType> {
   id: number;
-  creator: User;
+  creator: UserType;
   royaltyFees: number;
   title: string;
   nameSeo: string;
   releaseYear: number;
-  image: Image | null;
+  image: ImageType | null;
   createdAt: string;
   updateAt: string | null;
 }
+
+export type Production = _Production<User, Image>;
+export type ProductionToDb = _Production<Pick<User, 'id'>, Pick<Image, 'id'>>

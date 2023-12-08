@@ -1,12 +1,12 @@
 import { AbstractRepository } from "../core/abstract.repository";
 import { TablesEnum } from "../enums/tables.enum";
-import { Production } from "../interfaces/production.interface";
+import { Production, ProductionToDb } from "../interfaces/production.interface";
 import { getJSONImageSQL } from "../utils/request-sql/getJSONImageSQL";
 import { getJSONUserSQL } from "../utils/request-sql/getJSONUserSQL";
 import { ProductionModel } from "../models/production.model";
 import { ProductionDb } from "../interfaces/db";
 
-export class ProductionRepository extends AbstractRepository<Production, ProductionDb> {
+export class ProductionRepository extends AbstractRepository<Production, ProductionDb, ProductionToDb> {
   constructor() {
     super(TablesEnum.PRODUCTIONS);
   }
