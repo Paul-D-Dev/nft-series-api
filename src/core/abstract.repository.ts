@@ -3,7 +3,7 @@ import { DbHandler } from "../repositories/db.handler";
 import { AbstractModel } from "./abstract.model";
 import { Put, Save } from "../interfaces/http-request";
 
-export abstract class AbstractRepository<T, JSON, DB> {
+export abstract class AbstractRepository<T, DB> {
   protected constructor(table: TablesEnum) {
     this.table = table;
     this.GET_ALL = `SELECT *
@@ -31,7 +31,7 @@ export abstract class AbstractRepository<T, JSON, DB> {
   abstract model: AbstractModel<T, DB>;
 
 
-  async findAll(): Promise<JSON[]> {
+  async findAll(): Promise<T[]> {
     try {
       return await this.db.query(this.GET_ALL);
     } catch (e) {
@@ -40,9 +40,9 @@ export abstract class AbstractRepository<T, JSON, DB> {
     }
   }
 
-  async findById(id: number): Promise<JSON | null> {
+  async findById(id: number): Promise<T | null> {
     try {
-      const result: JSON[] = await this.db.query(this.GET_BY_ID, id);
+      const result: T[] = await this.db.query(this.GET_BY_ID, id);
       return result[0] || null;
     } catch (e) {
       console.error(`FILE AbstractRepository; table: ${this.table}; request: findById `, e);
@@ -60,7 +60,7 @@ export abstract class AbstractRepository<T, JSON, DB> {
     }
   }
 
-  async put(id: number, element: Put<T>): Promise<T> {
+  async put(id: number, element: Put<T>): Promise<unknown> {
     try {
       const mapEl = this.model.put(element);
       return await this.db.query(this._UPDATE_BY_ID, [mapEl, id]);
