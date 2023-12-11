@@ -1,8 +1,8 @@
 import { AbstractRepository } from "../core/abstract.repository";
-import { User, UserToDb } from "../interfaces/user.interface";
-import { UserDb } from "../interfaces/db/user-db.interface";
-import { UserModel } from "../models/user.model";
 import { TablesEnum } from "../enums/tables.enum";
+import { UserDb } from "../interfaces/db/user-db.interface";
+import { User, UserToDb } from "../interfaces/user.interface";
+import { UserModel } from "../models/user.model";
 import { getJSONImageSQL } from "../utils/request-sql/getJSONImageSQL";
 import { getJsonSocialNetwork } from "../utils/request-sql/getJsonSocialNetwork";
 
@@ -11,9 +11,9 @@ export class UserRepository extends AbstractRepository<User, UserDb, UserToDb> {
     super(TablesEnum.USERS);
   }
 
-  readonly model = new UserModel();
+  protected readonly model = new UserModel();
 
-  GET_ALL = `
+  protected GET_ALL = `
     SELECT t.id,
            t.name,
            t.name_seo                   AS nameSeo,
@@ -36,7 +36,7 @@ export class UserRepository extends AbstractRepository<User, UserDb, UserToDb> {
     GROUP BY t.id
   `;
 
-  GET_BY_ID = `
+  protected GET_BY_ID = `
     SELECT t.id,
            t.name,
            t.name_seo                   AS nameSeo,
