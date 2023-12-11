@@ -1,7 +1,10 @@
-import { SocialNetworkModel } from "../models/social-network.model";
+import { ResultSetHeader } from "mysql2";
 import { TablesEnum } from "../enums/tables.enum";
-import { DbHandler } from "./db.handler";
+import { Save } from "../interfaces/http-request";
 import { PutUserSocialNetwork, UserSocialNetwork } from "../interfaces/user-social-network.interface";
+import { SocialNetworkModel } from "../models/social-network.model";
+import { handleCatchError } from "../utils/handleCatchError";
+import { DbHandler } from "./db.handler";
 
 
 export class UserSocialNetworkRepository {
@@ -27,13 +30,14 @@ export class UserSocialNetworkRepository {
   `;
 
 
-  async post(element: UserSocialNetwork): Promise<any> {
+  async post(element: Save<UserSocialNetwork>): Promise<number> {
     try {
       const mapEl = this._model.save(element);
-      return await this._db.query(this._POST, mapEl);
+      const result: ResultSetHeader = await this._db.query(this._POST, mapEl);
+      return result.insertId;
     } catch (e) {
-      // @TODO catch duplicate code from error.code comes from SQL
-      throw e;
+      console.error(`FILE UserSocialNetworkRepository; table: ${this._table}; request: post()`, e);
+      throw handleCatchError(e);
     }
   }
 

@@ -1,12 +1,13 @@
+import { Save } from "../interfaces/http-request";
+import { PutUserSocialNetwork, UserSocialNetwork } from "../interfaces/user-social-network.interface";
 import { UserSocialNetworkRepository } from "../repositories/user-social-network.repository";
-import { UserSocialNetwork } from "../interfaces/user-social-network.interface";
 
 export class UserSocialNetworkService {
   repository = new UserSocialNetworkRepository();
 
-  async post(element: UserSocialNetwork): Promise<any> {
+  async post(element: Save<UserSocialNetwork>): Promise<number> {
     try {
-      return this.repository.post(element);
+      return await this.repository.post(element);
     } catch (e) {
       console.log('SERVICE POST error: ', e);
       // @TODO catch error and map error to controller to render to the client
@@ -14,7 +15,7 @@ export class UserSocialNetworkService {
     }
   }
 
-  async put(userId: number, socialId: number, element: any): Promise<any> {
+  async put(userId: number, socialId: number, element: PutUserSocialNetwork): Promise<any> {
     try {
       return await this.repository.put(userId, socialId, element);
     } catch (e) {
