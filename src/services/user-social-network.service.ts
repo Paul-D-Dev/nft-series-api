@@ -3,7 +3,7 @@ import { PutUserSocialNetwork, UserSocialNetwork } from "../interfaces/user-soci
 import { UserSocialNetworkRepository } from "../repositories/user-social-network.repository";
 
 export class UserSocialNetworkService {
-  repository = new UserSocialNetworkRepository();
+  protected repository = new UserSocialNetworkRepository();
 
   async post(element: Save<UserSocialNetwork>): Promise<number> {
     try {
