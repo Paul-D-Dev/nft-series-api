@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import Joi from "joi";
+import { extractJoiError } from "../utils/extract-joi-error";
 import { pick } from "../utils/pick";
 
 /**
@@ -21,8 +22,13 @@ export const validate = (schema: any) => (req: Request, res: Response, next: Nex
 
   // If there's an error, sends a Bad Request response with error details.
   if (error) {
-    const errorMessage = error.details.map((details) => details.message).join(', ');
-    return res.status(400).json({ fieldsError: errorMessage });
+    const errorMessage = error.details.map((details) => (
+      {
+        field: details.context?.key,
+        error: extractJoiError(details.message)
+      }
+    ));
+    return res.status(400).json({ message: 'Invalid inputs', fieldsError: errorMessage });
   }
 
   // Assigns validated values to the request object and proceeds to the next middleware.
