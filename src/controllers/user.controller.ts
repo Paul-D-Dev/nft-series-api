@@ -1,15 +1,19 @@
 import { Application, Request, Response, Router } from "express";
-import { UserService } from "../services/user.service";
+import { Save } from "../interfaces/http-request";
+import { Image } from "../interfaces/image.interface";
+import { UserSocialNetwork } from "../interfaces/user-social-network.interface";
+import { User, UserToDb } from "../interfaces/user.interface";
+import { uploadImage } from "../middlewares/upload-image";
 import { CustomError } from "../models/custom-error.model";
 import { ImageService } from "../services/image.service";
-import { Image } from "../interfaces/image.interface";
-import { uploadImage } from "../middlewares/upload-image";
+import { UserSocialNetworkService } from "../services/user-social-network.service";
+import { UserService } from "../services/user.service";
 import { commonDeleteController, commonGetByIdController, commonGetController, commonPutController } from "./common";
-import { User, UserToDb } from "../interfaces/user.interface";
 
 export const UserController = (app: Application) => {
   let router: Router = Router();
   const service = new UserService();
+  const userSocialNetworkService = new UserSocialNetworkService();
   const imageService = new ImageService();
 
   commonGetController(app, service, router);
@@ -19,22 +23,39 @@ export const UserController = (app: Application) => {
 
   router.post('/', uploadImage(), async (req: Request, res: Response) => {
     try {
+      let userId: number;
+      const userBody: User = req.body;
+
+      // Save Image
       const imageFile: Express.Multer.File | undefined = req.file;
-      const body: User = req.body;
-      if (body.image && imageFile) {
+      if (userBody.image && imageFile) {
         const imageBody: Partial<Image> = {
-          alt: body.image.alt
+          alt: userBody.image.alt
         };
         const imageId: number = await imageService.post(imageBody, imageFile.path);
         const newUser: UserToDb = {
-          ...body,
+          ...userBody,
           image: {
             id: imageId
           }
         };
-        await service.post(newUser);
+        userId = await service.post(newUser);
       } else {
-        await service.post(body);
+        userId = await service.post(userBody);
+      }
+
+      // Once user id inserted
+      if (userBody.socialNetworks.length > 0 && userId > 0) {
+        // Insert his social networks
+        for (const social of userBody.socialNetworks) {
+          const saveSocial: Save<UserSocialNetwork> = {
+            socialNetworkId: social.socialNetworkId,
+            userId: userId,
+            profileUrl: social.profileUrl,
+            name: social.name
+          };
+          await userSocialNetworkService.post(saveSocial);
+        }
       }
 
       return res.status(201).end();
