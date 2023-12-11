@@ -1,8 +1,10 @@
 import { Application, Request, Response, Router } from "express";
 import { User } from "../interfaces/user.interface";
 import { uploadImage } from "../middlewares/upload-image";
+import { validate } from "../middlewares/validate";
 import { CustomError } from "../models/custom-error.model";
 import { UserService } from "../services/user.service";
+import { createUser } from "../validations";
 import { commonDeleteController, commonGetByIdController, commonGetController, commonPutController } from "./common";
 
 export const UserController = (app: Application) => {
@@ -14,7 +16,7 @@ export const UserController = (app: Application) => {
   commonPutController(app, service, router);
   commonDeleteController(app, service, router);
 
-  router.post('/', uploadImage(), async (req: Request, res: Response) => {
+  router.post('/', uploadImage(), validate(createUser), async (req: Request, res: Response) => {
     try {
       const userBody: User = req.body;
       const imageFile: Express.Multer.File | undefined = req.file;
