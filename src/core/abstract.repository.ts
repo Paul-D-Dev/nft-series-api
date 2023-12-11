@@ -1,11 +1,11 @@
-import { TablesEnum } from "../enums/tables.enum";
-import { DbHandler } from "../repositories/db.handler";
-import { AbstractModel } from "./abstract.model";
-import { Put, Save } from "../interfaces/http-request";
-import { Conditional } from "../types";
 import { ResultSetHeader } from "mysql2";
+import { TablesEnum } from "../enums/tables.enum";
+import { Put, Save } from "../interfaces/http-request";
 import { CustomError } from "../models/custom-error.model";
+import { DbHandler } from "../repositories/db.handler";
+import { Conditional } from "../types";
 import { handleCatchError } from "../utils/handleCatchError";
+import { AbstractModel } from "./abstract.model";
 
 /**
  * - T: Type we will return to the client
@@ -37,7 +37,7 @@ export abstract class AbstractRepository<T, DB, P = void> {
   protected readonly _POST: string;
   private readonly _UPDATE_BY_ID: string;
   private readonly _DELETE_BY_ID: string;
-  abstract readonly model: AbstractModel<Conditional<P, T>, DB>;
+  protected abstract readonly model: AbstractModel<Conditional<P, T>, DB>;
 
 
   async findAll(): Promise<T[]> {
