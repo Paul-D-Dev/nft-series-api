@@ -1,4 +1,5 @@
 import { Pool } from 'mysql2';
+import { CustomError } from "../models/custom-error.model";
 
 export class DbHandler {
 
@@ -27,8 +28,12 @@ export class DbHandler {
           connection.release();
           if (err) {
             console.error('db.handler; query error: ', err);
-            //@TODO handle error Duplicate
-            return reject(err.message);
+            // Handle error duplicate from db
+            if (err.code === 'ER_DUP_ENTRY') {
+              const error = new CustomError(409, 'DUPLICATE');
+              return reject(error);
+            }
+            return reject(err);
           }
           resolve(rows);
         });
