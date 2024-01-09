@@ -7,9 +7,17 @@
  * @returns {string} - The extracted reason.
  */
 export const extractJoiError = (errorMessage: string): string => {
+  if (!errorMessage || errorMessage === '') {
+    throw new Error('Error message is empty');
+  }
+
   // Splitting the error message using the ".
   const parts = errorMessage.split('"');
 
   // The reason is the part after the property name.
+
+  if (!parts[2]) {
+    throw new Error('Could not find the error message');
+  }
   return parts[2].trim();
 };
