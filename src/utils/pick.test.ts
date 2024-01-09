@@ -11,8 +11,8 @@ test('pick the right keys in the object', () => {
 });
 
 test('should preserve the original object', () => {
-  const result = pick(initInputObject, ['params']);
-  expect(initInputObject).toEqual(initInputObject);
+  const result = pick(initInputObject, []);
+  expect(result).toEqual(initInputObject);
 });
 
 test('handling duplicate in keys array', () => {
@@ -31,6 +31,37 @@ test('handling nested object', () => {
 
   const result = pick(inputObject, ['body']);
   expect(result).toEqual({ body: { c: 2, d: 3 } });
+});
+
+
+test('performance test: extracting keys from a large object', () => {
+  const generateLargeObject = (numKeys: number): Record<string, any> => {
+    const largeObject: Record<string, any> = {};
+    for (let i = 0; i < numKeys; i++) {
+      largeObject[`key${i}`] = i;
+    }
+    return largeObject;
+  };
+
+  const numKeys = 100000;
+
+  // Generate a large object with specified number of keys
+  const largeObject = generateLargeObject(numKeys);
+
+  // Measure the time taken to execute the pick function
+  const startTime = Date.now();
+  const result = pick(largeObject, ['key0', 'key1', 'key2']); // Replace with actual keys
+  const endTime = Date.now();
+  const executionTime = endTime - startTime;
+
+  // Log the execution time (you can remove this in a real-world scenario)
+  console.log(`Execution time: ${executionTime} ms`);
+
+  // You might want to set a threshold based on your performance expectations
+  const performanceThreshold = 100;
+
+  // Check if the execution time is within the acceptable threshold
+  expect(executionTime).toBeLessThanOrEqual(performanceThreshold);
 });
 
 describe('should return an empty object', () => {
